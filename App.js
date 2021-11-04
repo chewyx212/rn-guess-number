@@ -1,27 +1,35 @@
-import { StatusBar } from "expo-status-bar";
 import React, { useState } from "react";
 import { StyleSheet, View } from "react-native";
+import * as Font from "expo-font";
+import AppLoading from "expo-app-loading";
+
 import Header from "./components/Header";
-import GameOverScreen from "./screens/GameOverScreen";
-import GameScreen from "./screens/GameScreen";
 import StartGameScreen from "./screens/StartGameScreen";
-import * as Font from 'expo-font'
-import AppLoading from 'expo-app-loading';
+import GameScreen from "./screens/GameScreen";
+import GameOverScreen from "./screens/GameOverScreen";
+
 const fetchFonts = () => {
   return Font.loadAsync({
-    'open-sans': require('./assets/fonts/OpenSans-Regular.ttf'),
-    'open-sans-bold': require('./assets/fonts/OpenSans-Bold.ttf')
-  })
-}
+    "open-sans": require("./assets/fonts/OpenSans-Regular.ttf"),
+    "open-sans-bold": require("./assets/fonts/OpenSans-Bold.ttf"),
+  });
+};
 
 export default function App() {
   const [userNumber, setUserNumber] = useState();
   const [guessRounds, setGuessRounds] = useState(0);
-  const [isLoad, setIsLoad] = useState(false);
+  const [dataLoaded, setDataLoaded] = useState(false);
 
-  if (!isLoad) {
-    return <AppLoading startAsync={fetchFonts} onFinish={() => setIsLoad(true)} onError={(err)=> console.log(err)} />;
+  if (!dataLoaded) {
+    return (
+      <AppLoading
+        startAsync={fetchFonts}
+        onFinish={() => setDataLoaded(true)}
+        onError={(err) => console.log(err)}
+      />
+    );
   }
+
   const configureNewGameHandler = () => {
     setGuessRounds(0);
     setUserNumber(null);
@@ -29,11 +37,10 @@ export default function App() {
 
   const startGameHandler = (selectedNumber) => {
     setUserNumber(selectedNumber);
-    setGuessRounds(0);
   };
 
-  const gameOverHandler = (numberOfRounds) => {
-    setGuessRounds(numberOfRounds);
+  const gameOverHandler = (numOfRounds) => {
+    setGuessRounds(numOfRounds);
   };
 
   let content = <StartGameScreen onStartGame={startGameHandler} />;
@@ -54,7 +61,7 @@ export default function App() {
 
   return (
     <View style={styles.screen}>
-      <Header title="Guess a number" />
+      <Header title="Guess a Number" />
       {content}
     </View>
   );
